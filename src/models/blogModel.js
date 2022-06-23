@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-// const mongooseSoftDelete = require('mongoose-soft-delete')
 const ObjectId = mongoose.Schema.Types.ObjectId
 
 const blogSchema = new mongoose.Schema({

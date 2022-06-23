@@ -15,7 +15,7 @@ mongoose
     }
   )
   .then(() => console.log("MongoDb is connected"))
-  .catch((err) => console.log(err));
+  .catch((err) => console.log(err.message));
 
 app.use("/", route);
 
