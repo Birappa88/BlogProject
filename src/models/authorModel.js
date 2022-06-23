@@ -17,11 +17,13 @@ const authorSchema = new mongoose.Schema({
    email: {
       type: String,
       required: true,
-      unique: true
+      unique: true,
+      match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/] //valid email
    },
    password: {
       type: String,
       required: true
    }
 }, { timestamps: true })
+
 module.exports = mongoose.model('Author', authorSchema)
