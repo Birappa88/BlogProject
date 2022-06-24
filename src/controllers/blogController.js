@@ -16,7 +16,7 @@ let createBlog = async function (req, res) {
     let { authorId, body, title, tags, category, subcategory } = data
 
     if (!title) return res.status(400).send("title Is required");
-    if(!isValid(title)) return res.status(400).send({status: false , Error: "title is Invalid"})
+    if (!isValid(title)) return res.status(400).send({ status: false, Error: "title is Invalid" })
 
     if (!isValid(authorId)) return res.status(400).send("Please provide Author Id");
 
@@ -25,16 +25,16 @@ let createBlog = async function (req, res) {
 
 
     if (!body) return res.status(400).send("please write somthing in body");
-    if(!isValid(body)) return res.status(400).send({status: false , Error: "body cannot be number"})
+    if (!isValid(body)) return res.status(400).send({ status: false, Error: "body cannot be number" })
 
     if (!tags) return res.status(400).send("tags Is required");
-    if(!isValid(tags)) return res.status(400).send({status: false , Error: "tags are Invalid"})
+    if (!isValid(tags)) return res.status(400).send({ status: false, Error: "tags are Invalid" })
 
     if (!category) return res.status(400).send("category Is required");
-    if(typeof category !== "string") return res.status(400).send({status: false , Error: "Category is Invalid"})
+    if (typeof category !== "string") return res.status(400).send({ status: false, Error: "Category is Invalid" })
 
     if (!subcategory) return res.status(400).send("subcategory Is required");
-  
+
 
     let savedData = await blogModel.create(data);
     res.status(201).send({ status: true, data: savedData });
@@ -49,10 +49,11 @@ let createBlog = async function (req, res) {
 let getBlog = async function (req, res) {
   try {
     let filterBlog = req.query;
+
     let data = await blogModel.find({
       $and: [{ isDeleted: false, isPublished: true }, filterBlog],
     });
-    if (!data) return res.status(404).send({ status: false, msg: "not found" });
+    if (!data) return res.status(404).send({ status: false, msg: "data not found" });
 
     res.status(200).send({ status: true, msg: data });
   } catch (err) {
@@ -77,10 +78,12 @@ let updateblogs = async (req, res) => {
         .status(404)
         .send({ status: false, msg: "blog is not published" });
 
-    let data = req.body;
-    let updatedBlog = await blogModel.findOneAndUpdate({ _id: blogsId }, data, {
-      new: true,
-    });
+    let data = req.body;l
+    console.log(data.length)
+    if (data.length === 0) return res.send({status: false, msg: "data not found"})
+      let updatedBlog = await blogModel.findOneAndUpdate({ _id: blogsId }, data, {
+        new: true,
+      });
 
     if (updatedBlog.isPublished == false) {
       res.status(200).send({ status: true, data: updatedBlog });

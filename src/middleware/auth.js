@@ -53,6 +53,8 @@ const authorise = async (req, res, next) => {
 
         let findauthorId = decodedToken.authorId;
         let checkAuthor = req.params.blogId.authorId
+        console.log(findauthorId)
+        console.log(checkAuthor)
         if (checkAuthor !== findauthorId)
             return res.status(403).send({ status: false, msg: "User logged is not allowed to modify the requested users data", });
     }

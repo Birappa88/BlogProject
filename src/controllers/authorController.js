@@ -2,9 +2,9 @@ const authorModel = require("../models/authorModel")
 const jwt = require("jsonwebtoken");
 
 
-// const isValidA = function (body) {
-// return Object.keys(body).length > 0
-// }
+const isValidA = function (body) {
+return Object.keys(body).length > 0
+}
 // =========[ Create Authors API]============
 
 const isValid = function (value) {
