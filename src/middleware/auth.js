@@ -1,6 +1,7 @@
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+const blogModel = require("../models/blogModel");
 
-// =====================[authentication]================
+// ==+==+==+==+==+==+==+==+==+==[ Authentication ]==+==+==+==+==+==+==+==+==+==
 
 const authenticate = async (req, res, next) => {
     try {
@@ -25,8 +26,7 @@ const authenticate = async (req, res, next) => {
     next();
 };
 
-
-// ===============[check authorid or token is same or not for creating blogs]============
+// ==+==+==+==+==+==[ Check authorid or token is same or not for creating blogs ]==+==+==+==+==+==+
 
 const auth2 = async (req, res, next) => {
     try {
@@ -42,8 +42,7 @@ const auth2 = async (req, res, next) => {
     next();
 };
 
-
-// =====================[authorization for updating and deleting]================
+// ==+==+==+==+==+==+==+==+==+==[ Authorization for updating and deleting ]==+==+==+==+==+==+==+==+==+==
 
 
 const authorise = async (req, res, next) => {
@@ -65,8 +64,7 @@ const authorise = async (req, res, next) => {
     next();
 }
 
-
-// =====================[Exports]================
+ // ==+==+==+==[ Exports ]==+==+==+==+=
 
 module.exports.authenticate = authenticate;
 module.exports.auth2 = auth2;

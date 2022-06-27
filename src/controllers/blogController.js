@@ -8,11 +8,15 @@ const authorModel = require("../models/authorModel");
 const isValid = function (value) {
   if (typeof value === "undefined" || value === null) return false;
   if (typeof value === "string" && value.trim().length === 0) return false;
+  if (typeof value === "string")
   return true;
 };
 
 const isValidBody = function (body) {
   return Object.keys(body).length > 0
+}
+const valid = function (value) {
+  if(typeof value === "boolean") return true
 }
 
 
@@ -74,42 +78,36 @@ let getBlog = async function (req, res) {
 
 // ==+==+==+==+==+==+==+==+==+==[Update Blogs]==+==+==+==+==+==+==+==+==+==
 
-let updateblogs = async (req, res) => {
+
+const updateblogs = async function (req, res) {
   try {
-    let blogsId = req.params.blogId;
-    if (!blogsId) return res.status(400).send("Blog Id is not proper");
-
-    // -----------------check blog id is valid or not
-    let blogData = await blogModel.findById(blogsId);
-    if (!blogData) return res.status(404).send("Invalid blog Id");
-
-    // ------------check isDeleted = false
-    if (blogData.isDeleted === true)
-      return res
-        .status(404)
-        .send({ status: false, msg: "blog is not published" });
-
     let data = req.body;
-    console.log(data)
-    if (!isValidBody(data)) return res.status(400).send({ status: false, msg: "please provide data to update" })
-    let updatedBlog = await blogModel.findOneAndUpdate({ _id: blogsId }, data, {
-      new: true,
-    });
+    let blogId = req.params.blogId;
 
-    if (updatedBlog.isPublished == false) {
-      res.status(200).send({ status: true, data: updatedBlog });
-    } else {
-      updatedBlog.publishedAt = Date();
-      res.status(200).send({ status: true, data: updatedBlog });
-    }
+    if (!valid(data.isPublished))
+    return res.status(400).send({ status: false, msg: "isPublished Value should be true or false only" })
+
+    if (!Object.keys(data).length) return res.status(400).send({ status: false, msg: "input can't be empty" });
+
+    let checkBlog = await blogModel.findById(blogId);
+  
+    if (!checkBlog)
+      return res.status(404).send({ status: false, msg: "Blog Not Found" });
+
+    if (checkBlog.isDeleted == true)
+      return res.status(400).send({ status: false, msg: "This blog is already Deleted" });
+
+    let update = await blogModel.findByIdAndUpdate(blogId, { $push: { tags: data.tags, subcategory: data.subcategory }, title: data.title, body: data.body, isPublished: data.isPublished, publishedAt: Date() }, { new: true });
+
+    res.status(200).send({ status: true, data: update });
   } catch (err) {
-    res.status(500).send({ status: false, msg: err.message });
+    res.status(500).send({ error: err.message });
   }
 };
 
 // ==+==+==+==+==+==+==+==+==+==[ Delete Blogs By Id ]==+==+==+==+==+==+==+==+==+==
 
-let deleteApi = async (req, res) => {
+let deleteBlog = async (req, res) => {
   try {
     let blogId = req.params.blogId;
 
@@ -133,7 +131,7 @@ let deleteApi = async (req, res) => {
 
 // ==+==+==+==+==+==+==+==+==+==[ Delete Blogs By Query ]==+==+==+==+==+==+==+==+==+==
 
-let deleteByParam = async (req, res) => {
+let deleteByQuery = async (req, res) => {
   try {
     let data = req.query;
     if (!isValidBody(data)) return res.status(400).send({ status: false, error: " please provide data inside query" })
@@ -161,5 +159,5 @@ let deleteByParam = async (req, res) => {
 module.exports.createBlog = createBlog;
 module.exports.getBlog = getBlog;
 module.exports.updateblogs = updateblogs;
-module.exports.deleteApi = deleteApi;
-module.exports.deleteByParam = deleteByParam;
+module.exports.deleteBlog = deleteBlog;
+module.exports.deleteByQuery = deleteByQuery;
