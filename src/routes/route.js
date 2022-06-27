@@ -24,7 +24,7 @@ router.put("/blogs/:blogId",middleware.authenticate, middleware.authorise,  blog
 router.delete("/blogs/:blogId",middleware.authenticate, middleware.authorise, blogController.deleteApi);
 
 // ---------[Delete By Query]-------
-router.delete("/blogs",middleware.authenticate, middleware.authorise, blogController.deleteByParam);
+router.delete("/blogs",middleware.authenticate, blogController.deleteByParam);  
 
 
 

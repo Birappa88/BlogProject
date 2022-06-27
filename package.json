@@ -8,7 +8,6 @@
     "moment": "^2.29.3",
     "mongoose": "^6.4.0",
     "nodemon": "^2.0.16",
-    "regex": "^0.1.1",
     "soft-delete-mongoose": "^1.0.0"
   },
   "name": "blogproject",

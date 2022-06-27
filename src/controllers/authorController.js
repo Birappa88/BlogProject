@@ -1,12 +1,9 @@
+// ==+==+==+==+==+==+==+==+==+==[Requirements]==+==+==+==+==+==+==+==+==+==
+
 const authorModel = require("../models/authorModel")
 const jwt = require("jsonwebtoken");
 
-
-const isValidA = function (body) {
-return Object.keys(body).length > 0
-}
-// =========[ Create Authors API]============
-
+// ==+==+==+==[Validation Functions]==+==+==+==+=
 const isValid = function (value) {
     if (typeof value === "undefined" || value === null) return false;
     if (typeof value === "string" && value.trim().length === 0) return false;
@@ -17,6 +14,8 @@ const isValid = function (value) {
 const isValidTitle = function (title) {
   return ["Mr", "Mrs", "Miss"].indexOf(title) !== -1
 }
+
+// ==+==+==+==+==+==+==+==+==+==[Create Author]==+==+==+==+==+==+==+==+==+==
 
 const createAuthor = async function (req, res) {
     try {
@@ -32,8 +31,6 @@ const createAuthor = async function (req, res) {
         if (!isValidTitle(title)) return res.status(400).send({ status: false, msg: "title is not as per requirement" })
 
         if (!isValid(password)) return res.status(400).send({ status: false, msg: "password is Required" })
-        
-        if (!isValid(email)) return res.status(400).send({ status: false, msg: "email Id is not proper" })
 
         if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))) return res.status(400).send({ status: false, msg: "email Id is Invalid" })
 
@@ -53,15 +50,14 @@ const createAuthor = async function (req, res) {
 }
 
 
-// ======================================================================================
-
+// ==+==+==+==+==+==+==+==+==+==[Author Login]==+==+==+==+==+==+==+==+==+==
 
 const loginAuthor = async function (req, res) {
     try {
       let data = req.body
       let { email, password } = data
 
-        if (!isValid(email)) return res.status(400).send({ status: false, msg: "email Id is not proper" })
+      if (!email) return res.status(400).send({ status: false, msg: "Please provide email" })
 
         if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))) return res.status(400).send({ status: false, msg: "email Id is invalid" })
 
@@ -88,11 +84,7 @@ const loginAuthor = async function (req, res) {
       res.send({ msg: "error", err: err.message });
     }
   };
-
-
-
-
-
+// ==+==+==+==+==+==+==+==+==+==[Exports]==+==+==+==+==+==+==+==+==+==
 
 module.exports.createAuthor = createAuthor
 module.exports.loginAuthor = loginAuthor
