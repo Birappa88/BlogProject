@@ -28,29 +28,28 @@ let createBlog = async function (req, res) {
     if (!isValidBody(data)) return res.status(400).send({ status: false, msg: "please provide data to Create" })
     let { authorId, body, title, tags, category, subcategory } = data
 
-    if (!title) return res.status(400).send("title Is required");
+    if (!title) return res.status(400).send({ status: false, msg:"title Is required"});
     if (!isValid(title)) return res.status(400).send({ status: false, Error: "title is Invalid" })
 
     let Title = await blogModel.findOne({ title })
 
     if (Title) return res.status(400).send({ status: false, msg: "Title has been already used please choose diffrent" })
 
-    if (!isValid(authorId)) return res.status(400).send("Please provide Author Id");
+  if (!isValid(authorId)) return res.status(400).send({status: false, msg:"Please provide Author Id"});
 
     let authorData = await authorModel.findById(authorId);
-    if (!authorData) return res.status(404).send("Author Id not found!");
+    if (!authorData) return res.status(404).send({status: false, msg:"Author Id not found!"});
 
 
     if (!body) return res.status(400).send("please write somthing in body");
     if (!isValid(body)) return res.status(400).send({ status: false, Error: "body cannot be number" })
 
-    if (!tags) return res.status(400).send("tags Is required");
-    if (!isValid(tags)) return res.status(400).send({ status: false, Error: "tags are Invalid" })
+    if (!tags) return res.status(400).send({status: false, msg:"tags Is required"});
 
-    if (!category) return res.status(400).send("category Is required");
-    if (typeof category !== "string") return res.status(400).send({ status: false, Error: "Category is Invalid" })
+    if (!category) return res.status(400).send({status: false, msg:"category Is required"});
+    if (!isValid(category)) return res.status(400).send({ status: false, Error: "Category is Invalid" })
 
-    if (!subcategory) return res.status(400).send("subcategory Is required");
+    if (!subcategory) return res.status(400).send({status: false, msg:"subcategory Is required"});
 
 
     let savedData = await blogModel.create(data);
@@ -110,13 +109,13 @@ const updateblogs = async function (req, res) {
 let deleteBlog = async (req, res) => {
   try {
     let blogId = req.params.blogId;
+    // if(!isValidBody(blogId)) res.status(404).send({ status: false, msg: "blog id is required" });
 
     let blogData = await blogModel.findById(blogId);
+    if(!blogData) res.status(404).send({ status: false, msg: "blog id is not Present" });
 
     if (blogData.isDeleted === true)
-      return res
-        .status(404)
-        .send({ status: false, msg: "blog is already deleted" });
+      return res.status(404).send({ status: false, msg: "blog is already deleted" });
 
     let deleteBlog = await blogModel.findOneAndUpdate(
       { _id: blogData },

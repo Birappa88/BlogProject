@@ -36,7 +36,7 @@ const createAuthor = async function (req, res) {
 
         let Email = await authorModel.findOne( {email} )
 
-        if (Email) return res.status(400).send({ status: false, msg: "email is already used" })
+        if (Email) return res.status(400).send({ status: false, msg: email + "email is already used" })
 
         if (author) {
             let authorCreated = await authorModel.create(author)
@@ -45,7 +45,7 @@ const createAuthor = async function (req, res) {
     }
     catch (error) {
         console.log("Server Error:", error.message)
-        res.status(500).send({ msg: "Server Error", error: error.message })
+        res.status(500).send({ status: false, error: error.message })
     }
 }
 
@@ -79,9 +79,9 @@ const loginAuthor = async function (req, res) {
         "Radon-project-1"                    //Secret Key
         )                   
       res.setHeader("x-api-key", token);
-      res.status(201).send({ status: true, token: token , msg: "Login Successfully"});
+      res.status(200).send({ status: true, msg: "Login Successfully", data: {token:token} });
     } catch (err) {
-      res.send({ msg: "error", err: err.message });
+      res.send({status: false, msg: err.message });
     }
   };
 // ==+==+==+==+==+==+==+==+==+==[Exports]==+==+==+==+==+==+==+==+==+==
