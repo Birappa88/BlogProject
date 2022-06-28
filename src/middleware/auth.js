@@ -50,7 +50,7 @@ const authorise = async (req, res, next) => {
         let token = req.headers["x-api-key"];
         let decodedToken = jwt.verify(token, "Radon-project-1");
         if (!decodedToken) return res.status(403).send({ status: false, msg: "token is invalid", });
-        let id = req.params.blogId
+        let id = req.params.blogId  
         let findid = await blogModel.findById(id)
 
         let findauthorId = decodedToken.authorId;
@@ -59,7 +59,7 @@ const authorise = async (req, res, next) => {
             return res.status(403).send({ status: false, msg: "User logged is not allowed to modify the requested users data", });
     }
     catch (err) {
-        res.status(500).send({ msg: "Error", error: err.message, });
+        res.status(500).send({ msg: "Error", msg: err.message, });
     }
     next();
 }

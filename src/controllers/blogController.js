@@ -9,14 +9,14 @@ const isValid = function (value) {
   if (typeof value === "undefined" || value === null) return false;
   if (typeof value === "string" && value.trim().length === 0) return false;
   if (typeof value === "string")
-  return true;
+    return true;
 };
 
 const isValidBody = function (body) {
   return Object.keys(body).length > 0
 }
 const valid = function (value) {
-  if(typeof value === "boolean") return true
+  if (typeof value === "boolean") return true
 }
 
 
@@ -28,28 +28,28 @@ let createBlog = async function (req, res) {
     if (!isValidBody(data)) return res.status(400).send({ status: false, msg: "please provide data to Create" })
     let { authorId, body, title, tags, category, subcategory } = data
 
-    if (!title) return res.status(400).send({ status: false, msg:"title Is required"});
+    if (!title) return res.status(400).send({ status: false, msg: "title Is required" });
     if (!isValid(title)) return res.status(400).send({ status: false, Error: "title is Invalid" })
 
     let Title = await blogModel.findOne({ title })
 
     if (Title) return res.status(400).send({ status: false, msg: "Title has been already used please choose diffrent" })
 
-  if (!isValid(authorId)) return res.status(400).send({status: false, msg:"Please provide Author Id"});
+    if (!isValid(authorId)) return res.status(400).send({ status: false, msg: "Please provide Author Id" });
 
-    let authorData = await authorModel.findById(authorId);
-    if (!authorData) return res.status(404).send({status: false, msg:"Author Id not found!"});
+    let authorData = await authorModel.findById(authorId); 
+    if (!authorData) return res.status(404).send({ status: false, msg: "Author Id not found!" });
 
 
     if (!body) return res.status(400).send("please write somthing in body");
     if (!isValid(body)) return res.status(400).send({ status: false, Error: "body cannot be number" })
 
-    if (!tags) return res.status(400).send({status: false, msg:"tags Is required"});
+    if (!tags) return res.status(400).send({ status: false, msg: "tags Is required" });
 
-    if (!category) return res.status(400).send({status: false, msg:"category Is required"});
+    if (!category) return res.status(400).send({ status: false, msg: "category Is required" });
     if (!isValid(category)) return res.status(400).send({ status: false, Error: "Category is Invalid" })
 
-    if (!subcategory) return res.status(400).send({status: false, msg:"subcategory Is required"});
+    if (!subcategory) return res.status(400).send({ status: false, msg: "subcategory Is required" });
 
 
     let savedData = await blogModel.create(data);
@@ -80,21 +80,21 @@ let getBlog = async function (req, res) {
 
 const updateblogs = async function (req, res) {
   try {
-    let data = req.body;
-    let blogId = req.params.blogId;
+    let data = req.body
+    let blogId = req.params.blogId
 
-    if (!valid(data.isPublished))
-    return res.status(400).send({ status: false, msg: "isPublished Value should be true or false only" })
+    // if (!valid(data.isPublished))
+    // return res.status(400).send({ status: false, msg: "isPublished Value should be true or false only" })
 
-    if (!Object.keys(data).length) return res.status(400).send({ status: false, msg: "input can't be empty" });
+    if (!Object.keys(data).length) return res.status(400).send({ status: false, msg: "input can't be empty" })
 
     let checkBlog = await blogModel.findById(blogId);
-  
+
     if (!checkBlog)
-      return res.status(404).send({ status: false, msg: "Blog Not Found" });
+      return res.status(404).send({ status: false, msg: "Blog Not Found" })
 
     if (checkBlog.isDeleted == true)
-      return res.status(400).send({ status: false, msg: "This blog is already Deleted" });
+      return res.status(400).send({ status: false, msg: "This blog is already Deleted" })
 
     let update = await blogModel.findByIdAndUpdate(blogId, { $push: { tags: data.tags, subcategory: data.subcategory }, title: data.title, body: data.body, isPublished: data.isPublished, publishedAt: Date() }, { new: true });
 
@@ -112,7 +112,7 @@ let deleteBlog = async (req, res) => {
     // if(!isValidBody(blogId)) res.status(404).send({ status: false, msg: "blog id is required" });
 
     let blogData = await blogModel.findById(blogId);
-    if(!blogData) res.status(404).send({ status: false, msg: "blog id is not Present" });
+    if (!blogData) res.status(404).send({ status: false, msg: "blog id is not Present" });
 
     if (blogData.isDeleted === true)
       return res.status(404).send({ status: false, msg: "blog is already deleted" });
