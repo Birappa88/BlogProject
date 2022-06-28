@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // ==+==+==+==+==+==+==+==+==+==[Connect DataBase]==+==+==+==+==+==+==+==+==+==
 mongoose
   .connect(
-    "mongodb+srv://sarhank44:sarhank8299@sarhancluster.fxjt3wn.mongodb.net/blogProject",
+    "mongodb+srv://Birappa:MangoDB@cluster0.m5phg.mongodb.net/blogProject",
     {
       useNewUrlParser: true,
     }

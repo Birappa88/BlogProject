@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const ObjectId = mongoose.Schema.Types.ObjectId   //For Reference 
+ const ObjectId = mongoose.Schema.Types.ObjectId   //For Reference 
 
 //==+==+==+==+==+==+==+==+==+==[ Schema ]==+==+==+==+==+==+==+==+==+==
 
@@ -16,7 +16,7 @@ const blogSchema = new mongoose.Schema({
     category: {type: String, required: true},
 
     subcategory: [{type: String, required: true}],
-
+ 
     deletedAt: {type: Date},
 
     isDeleted: {type: Boolean, default: false},
